@@ -22,6 +22,7 @@
 #include <KeyboardController.h>
 
 #include "Bluetooth.h"
+#include "LinkedList.h"
 
 #define KEYBOARD_CLOCK 4
 #define KEYBOARD_DATA 5
@@ -46,15 +47,17 @@ Bluetooth bluetooth(HARDWARE_SERIAL_RATE);
 USBHost usb;
 KeyboardController keyboard(usb);
 
-vector<int> pressedKeys;
+LinkedList<int> pressedKeys;
 
 void keyPressed() {
-	pressedKeys.push_back(keyboard.getOemKey());
+	pressedKeys.Last();
+	pressedKeys.Append(keyboard.getOemKey());
 	bluetooth.sendKeyboardState(keyboard.getModifiers(), pressedKeys);
 }
 
 void keyReleased() {
-	pressedKeys.pop_back();
+	int pressedKey = keyboard.getOemKey();
+	if (pressedKeys.Search(pressedKey)) pressedKeys.DeleteCurrent();
 	bluetooth.sendKeyboardState(keyboard.getModifiers(), pressedKeys);
 }
 

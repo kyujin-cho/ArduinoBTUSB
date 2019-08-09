@@ -18,27 +18,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include <Arduino.h>
 
-class LinkedList {
-    public:
-        LinkedList();
+#include "Node.h"
 
-        void put(int data);
-        int get(int index);
-        void remove(int data);
-        void removeAt(int index);
-    
-    private:
-        Node *start;
+#ifndef LinkedList_hpp
+#define LinkedList_hpp
+
+template <class T>
+class LinkedList  {
+  private:
+    int length;
+    ListNode<T>* head;
+    ListNode<T>* tail;
+    ListNode<T>* curr;
+  public:
+    LinkedList();
+    LinkedList(const LinkedList<T>&);
+    ~LinkedList();
+    T& getCurrent();
+    T& First() const;
+    T& Last() const;
+    int getLength();
+    void Append(T);
+    void DeleteLast();
+    void DeleteFirst();
+    void DeleteCurrent();
+    bool next();
+    bool moveTo(int index);
+    bool moveToStart();
+    bool prev();
+    void Delete(T&);
+    bool Search(T);
+    void Clear();
+    void PutFirstToLast();
+    void Update(T elem);
+    LinkedList& operator = (const LinkedList<T>&);
 };
 
-class Node {
-    public: 
-        Node(int _data);
-        
-        int data;
-        Node *prev;
-        Node *next;
-};
+#endif
